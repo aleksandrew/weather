@@ -5,16 +5,17 @@ import axios from 'axios';
 
 const API_QUERY = '&appid=1e8e30d723f7ffb3faa125fbfafb5991'
 
+///693194&appid=1e8e30d723f7ffb3faa125fbfafb5991
 const instance = axios.create({
-  baseURL: 'http://api.openweathermap.org',
+  baseURL: 'http://api.openweathermap.org/data/2.5',
 });
 
-export const getBaseData = () => {
-  return instance({ method: 'get', url: `/data/2.5/find?lat=50&lon=36&cnt=30${API_QUERY}&lang=ru`})
+export const getBaseDataRequest = () => {
+  return instance({ method: 'get', url: `/find?lat=50&lon=36&cnt=30${API_QUERY}&units=metric`})
     .then(response => response.data.list)
 };
 
-export const getDataList = () => {
-  return instance({ method: 'post', url: `/list.php?c=list`})
-    .then(response => response.data.drinks)
+export const getDataOfCityRequest = id => {
+  return instance({ method: 'get', url: `weather?id=${id}${API_QUERY}&units=metric`})
+    .then(response => response.data)
 };

@@ -1,13 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import './index.css'
 import App from './pages';
-import * as serviceWorker from './serviceWorker';
+import React from 'react';
+import {store} from "./reducer";
+import ReactDOM from 'react-dom';
 import {Provider} from "react-redux";
-import store from "./reducer";
 import {BrowserRouter} from "react-router-dom";
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter >
         <Provider store={store}>
             <App/>
         </Provider>

@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme =>
 );
 
 const WeatherCard = memo(props => {
-    const {isDelete, id, name, country, windSpeed, humidity, pressure, temp, description} = props;
+    const {isListener, id, name, country, windSpeed, humidity, pressure, temp, description} = props;
     const classes = useStyles();
 
     const [visible, setVisible] = useState({isVisible: false, id: null});
@@ -86,13 +86,14 @@ const WeatherCard = memo(props => {
                 <IconButton
                     color="inherit"
                     aria-label="refresh {name} card"
+                    onClick={() => isListener('refresh', id)}
                 >
                     <RefreshIcon fontSize="large"/>
                 </IconButton>
                 <IconButton
                     color="inherit"
-                    onClick={() => isDelete(id)}
                     aria-label="delete {name} card"
+                    onClick={() => isListener('delete', id)}
                 >
                     <HighlightOffIcon fontSize="large"/>
                 </IconButton>

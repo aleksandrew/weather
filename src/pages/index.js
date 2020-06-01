@@ -9,6 +9,7 @@ import Loader from '../components/Loader';
 import { ROUTES } from "../constans/routes";
 import {selector} from "./home/reducer";
 import Container from "@material-ui/core/Container";
+import Header from "../components/Header";
 
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
             {/*{data.length === 0 ? (*/}
             {/*    <Loader />*/}
             {/*) : (*/}
+            <Header />
             <Container>
                 <Switch>
                     <Route path={ROUTES.HOME} component={Home} />

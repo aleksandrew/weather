@@ -1,7 +1,7 @@
 // outsource dependencies
 
 // local dependencies
-import { TYPES } from '../../constans/types';
+import { TYPES } from './types';
 
 const initialState = {
   data: null,
