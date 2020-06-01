@@ -6,7 +6,7 @@ import {createStyles, makeStyles} from '@material-ui/core/styles';
 import React, {memo, useCallback, useMemo, useEffect} from 'react';
 
 // local dependencies
-import {TYPES} from "../home/types";
+import {TYPES} from "./types";
 import {selector} from './reducer';
 import WeatherCard from "../../components/WeatherCard";
 import {getToLocalStorage, setToLocalStorage} from "../../services/storage";
@@ -22,8 +22,10 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme =>
     createStyles({
-        root: {
-            position: 'relative',
+        cardContainer: {
+            flexGrow: 0,
+            maxWidth: '100%',
+            flexBasis: '100%',
         },
         btn: {
             position: 'absolute',
@@ -65,93 +67,73 @@ const useStyles = makeStyles(theme =>
     })
 );
 
-const Main = memo(() => {
+const Search = memo(props => {
     const classes = useStyles();
 
-    const {data} = useSelector(selector);
+    const {currentCity, inputData} = useSelector(selector);
 
     const dispatch = useDispatch();
-    const getDataRequest = useCallback(() => dispatch({type: TYPES.GET_DATA}), [dispatch]);
-    const setNewData = useCallback(data => dispatch({type: TYPES.DATA, data}), [dispatch]);
-    const getDataOfCity = useCallback(id => dispatch({type: TYPES.GET_DATA_CITY, id}), [dispatch]);
+    // const getDataRequest = useCallback(() => dispatch({type: TYPES.GET_DATA}), [dispatch]);
+    // const setNewData = useCallback(data => dispatch({type: TYPES.DATA, data}), [dispatch]);
+    // const getDataOfCity = useCallback(id => dispatch({type: TYPES.GET_DATA_CITY, id}), [dispatch]);
+    const searchCity = useCallback(str => dispatch({type: TYPES.SEARCH_CITY, str}), [dispatch]);
 
     useEffect(() => {
-        const storage = getToLocalStorage();// false
+    }, []);
 
-        if (!data) {
-            if (storage) {
-                setNewData(storage);
-            } else {
-                getDataRequest();
-            }
-        }
-    }, [data, getDataRequest, getToLocalStorage, setNewData]);
+    const setSearch = useCallback(str => {
+    }, []);
 
-    const isListener = useCallback((event, id) => {
-        if (event === 'delete') {
-            let newData = data;
-            newData = _.filter(newData, item => id !== item.id);
-
-            setToLocalStorage(newData);
-            setNewData(newData);
-        } else if (event === 'refresh') getDataOfCity(id);
-    }, [data, setNewData, getDataOfCity]);
-
-    const currentData = useMemo(() =>
-        data && _.map(data, (item) => ({
-            id: item.id,
-            name: item.name,
-            country: item.sys.country,
-            windSpeed: item.wind.speed,
-            humidity: item.main.humidity,
-            pressure: item.main.pressure,
-            temp: Math.round(item.main.temp),
-            description: item.weather[0].description,
-        })), [data]);
+    // const currentData = useMemo(() =>
+    //     data && _.map(data, (item) => ({
+    //         id: item.id,
+    //         name: item.name,
+    //         country: item.sys.country,
+    //         windSpeed: item.wind.speed,
+    //         humidity: item.main.humidity,
+    //         pressure: item.main.pressure,
+    //         temp: Math.round(item.main.temp),
+    //         description: item.weather[0].description,
+    //     })), [data]);
 
     return (
         <div className={classes.root}>
-            <SearchLine />
-            <Grid
-                item xs={6}
-                className={classes.root}
-            >
-                <Card className={classes.cardContainer} variant="outlined">
+            <SearchLine {...props} searchCity={searchCity} />
+                <Card variant="outlined">
                     <CardContent className={classes.topCard}>
                         <CardContent className={classes.title}>
                             <Typography className={classes.title} component="h2" color="textSecondary">
-                                {name}
+                                sdfdsf
                             </Typography><Typography className={classes.title} component="h2" color="textSecondary">
-                            , {country}
+                            , sdfsdf
                         </Typography>
                         </CardContent>
                         <Typography color="textSecondary" gutterBottom>
-                            {description}
+                            sdf
                         </Typography>
                     </CardContent>
                     <CardContent className={classes.bottomCard}>
                         <CardContent className={classes.title}>
                             <Typography className={classes.temperature}>
-                                {temp}
+                                sdfsdf
                             </Typography>
                             <sup className={classes.temperatureSymbol}>°C</sup>
                         </CardContent>
                         <CardContent className={classes.topCard}>
                             <Typography color="textSecondary" gutterBottom>
-                                Wind: {windSpeed} m/s
+                                Wind: sdf m/s
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                Humidity: {humidity} %
+                                Humidity: sdf %
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                Pressure: {pressure} hpa
+                                Pressure: sdf hpa
                             </Typography>
                         </CardContent>
                     </CardContent>
                 </Card>
-            </Grid>
         </div>
     );
 });
 
-export default Main;
+export default Search;

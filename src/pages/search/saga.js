@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 // local dependencies
 import { TYPES } from './types';
-import {getBaseDataRequest, getDataOfCityRequest} from '../../services/api';
+import {getBaseDataRequest, getDataOfCityRequest, searchRequest} from '../../services/api';
 import {setToLocalStorage} from "../../services/storage";
 
 
@@ -24,18 +24,16 @@ function* getData({ type, ...payload }) {
   yield put({ type: TYPES.DATA, loading: false });
 }
 
-function* getDataOfCity({ type, ...payload }) {
-  const { id } = payload;
+function* search({ type, ...payload }) {
+  const { str } = payload;
 
-  yield put({ type: TYPES.DATA, loading: true });
-  let currentData = yield select((state) => state.home.data);
+  yield put({ type: TYPES.DATA, loading: true, inputData: str });
 
   try {
-    const newItem = yield call(getDataOfCityRequest, id);
-    currentData = _.map(currentData, item => id === item.id ? {...newItem} : {...item} );
-    setToLocalStorage(currentData);
+    const item = yield call(searchRequest, str);
+    console.log(123)
 
-    yield put({ type: TYPES.DATA, data: currentData});
+    yield put({ type: TYPES.DATA, currentCity: item});
 
   } catch (e) {
     yield put({type: TYPES.SHOW_ERROR});
@@ -45,6 +43,6 @@ function* getDataOfCity({ type, ...payload }) {
 }
 
 export default function * () {
-  yield takeEvery(TYPES.GET_DATA, getData);
-  yield takeEvery(TYPES.GET_DATA_CITY, getDataOfCity);
+  // yield takeEvery(TYPES.GET_DATA, getData);
+  yield takeEvery(TYPES.SEARCH_CITY, search);
 }

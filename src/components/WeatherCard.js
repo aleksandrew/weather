@@ -18,6 +18,9 @@ const useStyles = makeStyles(theme =>
         root: {
             position: 'relative',
         },
+        cardContainer: {
+            position: 'relative',
+        },
         btn: {
             position: 'absolute',
             top: 15,
