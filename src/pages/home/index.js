@@ -1,20 +1,16 @@
 // outsource dependencies
 import _ from 'lodash';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import Grid from "@material-ui/core/Grid";
 import {useDispatch, useSelector} from 'react-redux';
-import React, {memo, useState, useCallback, useMemo, useEffect} from 'react';
-import {Container} from '@material-ui/core';
 import {createStyles, makeStyles} from '@material-ui/core/styles';
+import React, {memo, useCallback, useMemo, useEffect} from 'react';
 
 // local dependencies
-import {selector} from './reducer';
 import {TYPES} from "./types";
-import Grid from "@material-ui/core/Grid";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
+import {selector} from './reducer';
 import WeatherCard from "../../components/WeatherCard";
 import {getToLocalStorage, setToLocalStorage} from "../../services/storage";
+import SearchLine from "../../components/SearchLine";
 
 
 const useStyles = makeStyles(theme =>
@@ -67,6 +63,7 @@ const Main = memo(() => {
 
     return (
         <div className={classes.root}>
+            <SearchLine />
                 <Grid container spacing={3}>
                     {_.map(currentData, (tile) =>
                         <WeatherCard isListener={isListener} key={tile.id} {...tile} />

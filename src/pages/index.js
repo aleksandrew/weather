@@ -5,7 +5,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 
 // local dependencies
 import Home from './home';
-import Loader from '../components/Loader';
+import Search from './search';
 import { ROUTES } from "../constans/routes";
 import {selector} from "./home/reducer";
 import Container from "@material-ui/core/Container";
@@ -23,6 +23,7 @@ export default function App() {
             <Header />
             <Container>
                 <Switch>
+                    <Route path={ROUTES.SEARCH} component={Search} />
                     <Route path={ROUTES.HOME} component={Home} />
                     <Redirect exact from="/" to={ROUTES.HOME} />
                 </Switch>
