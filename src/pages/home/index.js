@@ -8,9 +8,9 @@ import React, {memo, useCallback, useMemo, useEffect} from 'react';
 // local dependencies
 import {TYPES} from "./types";
 import {selector} from './reducer';
+import SearchLine from "../../components/SearchLine";
 import WeatherCard from "../../components/WeatherCard";
 import {getToLocalStorage, setToLocalStorage} from "../../services/storage";
-import SearchLine from "../../components/SearchLine";
 
 
 const useStyles = makeStyles(theme =>

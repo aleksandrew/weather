@@ -1,11 +1,11 @@
 // outsource dependencies
-import { call, put, select, takeEvery } from 'redux-saga/effects';
 import _ from 'lodash';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 // local dependencies
 import { TYPES } from './types';
-import {getBaseDataRequest, getDataOfCityRequest} from '../../services/api';
 import {setToLocalStorage} from "../../services/storage";
+import {getBaseDataRequest, getDataOfCityRequest} from '../../services/api';
 
 
 function* getData({ type, ...payload }) {
