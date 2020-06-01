@@ -1,13 +1,14 @@
 // outsource dependencies
-import React, {memo } from 'react';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
-
-// local dependencies
 import SearchIcon from '@material-ui/icons/Search';
 import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import FormControl from "@material-ui/core/FormControl";
+import React, {memo, useCallback, useState} from 'react';
 import OutlinedInput from "@material-ui/core/OutlinedInput";
+import {createStyles, makeStyles} from '@material-ui/core/styles';
+
+// local dependencies
+import {ROUTES} from "../constans/routes";
 
 
 const useStyles = makeStyles(theme =>
@@ -32,33 +33,43 @@ const useStyles = makeStyles(theme =>
     })
 );
 
-const SearchLine = memo(() => {
+const SearchLine = memo(({location, history, searchCity}) => {
     const classes = useStyles();
-    const [values, setValues] = React.useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-    });
+    const [values, setValues] = useState('');
 
-    const handleChange = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
-    };
+    const handleChange = useCallback((prop) => (event) => {
+        setValues(event.target.value);
+    }, []);
+
+
+    const onSearch = useCallback(() => (e) => {
+        if ( values ) {
+            searchCity(values);
+
+            if (location.pathname !== ROUTES.SEARCH) {
+                history.push(ROUTES.SEARCH);
+            }
+        }
+    }, [values, searchCity, location]);
 
     return <div className={classes.root}>
         <FormControl fullWidth className={classes.margin} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-amount">Search </InputLabel>
             <OutlinedInput
-                id="outlined-adornment-amount"
+                labelWidth={60}
                 value={values.amount}
+                id="outlined-adornment-amount"
                 onChange={handleChange('amount')}
                 endAdornment={
-                    <IconButton type="button" className={classes.iconButton} aria-label="search">
+                    <IconButton
+                        type="button"
+                        aria-label="search"
+                        onClick={onSearch()}
+                        className={classes.iconButton}
+                    >
                         <SearchIcon />
                     </IconButton>
                 }
-                labelWidth={60}
             />
         </FormControl>
     </div>
