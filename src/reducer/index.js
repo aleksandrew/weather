@@ -3,7 +3,8 @@ import createSagaMiddleware from 'redux-saga';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 
 // local dependencies
-// import sagasRoot from '../sagas';
+import homeReducer from '../pages/home/reducer';
+import sagasRoot from "../sagas";
 
 
 // dev tools middleware
@@ -11,7 +12,7 @@ const reduxDevTools =
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
 const reducers = combineReducers({
-    // app: appReducer,
+    home: homeReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

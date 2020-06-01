@@ -1,37 +1,31 @@
 // outsource dependencies
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 // local dependencies
-import Main from './main';
+import Home from './home';
 import Loader from '../components/Loader';
-import { selector } from '../reducers/app';
-import { ROUTES } from '../constants/routes';
-import { getData } from '../reducers/action';
+import { ROUTES } from "../constans/routes";
+import {selector} from "./home/reducer";
+import Container from "@material-ui/core/Container";
+
 
 export default function App() {
-    const { data, currentPage } = useSelector(selector);
-
-    const dispatch = useDispatch();
-    const getDataRequest = useCallback((page) => dispatch(getData(page)), [dispatch]);
-
-    useEffect(() => {
-        if (data.length === 0) {
-            getDataRequest(currentPage);
-        }
-    }, [data, getDataRequest, currentPage]);
+    const data = useSelector(selector);
 
     return (
         <>
-            {data.length === 0 ? (
-                <Loader />
-            ) : (
+            {/*{data.length === 0 ? (*/}
+            {/*    <Loader />*/}
+            {/*) : (*/}
+            <Container>
                 <Switch>
-                    <Route path={ROUTES.MAIN} component={Main} />
-                    <Redirect exact from="/" to={ROUTES.MAIN} />
+                    <Route path={ROUTES.HOME} component={Home} />
+                    <Redirect exact from="/" to={ROUTES.HOME} />
                 </Switch>
-            )}
+            </Container>
+            {/*)}*/}
         </>
     );
 }

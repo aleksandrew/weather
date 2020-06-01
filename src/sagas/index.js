@@ -2,11 +2,11 @@
 import { fork } from 'redux-saga/effects';
 
 // local dependencies
-import app from './app';
+import sagasHome from '../pages/home/saga';
 
 
 function * sagasRoot () {
-    yield fork(app);
+    yield fork(sagasHome);
 }
 
 export default sagasRoot;

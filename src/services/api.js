@@ -3,14 +3,15 @@ import axios from 'axios';
 
 // local dependencies
 
+const API_QUERY = '&appid=1e8e30d723f7ffb3faa125fbfafb5991'
 
 const instance = axios.create({
-  baseURL: 'https://www.thecocktaildb.com/api/json/v1/1',
+  baseURL: 'http://api.openweathermap.org',
 });
 
-export const getData = (param) => {
-  return instance({ method: 'post', url: `/filter.php?c=${param}`})
-    .then(response => response.data.drinks)
+export const getBaseData = () => {
+  return instance({ method: 'get', url: `/data/2.5/find?lat=50&lon=36&cnt=30${API_QUERY}&lang=ru`})
+    .then(response => response.data.list)
 };
 
 export const getDataList = () => {

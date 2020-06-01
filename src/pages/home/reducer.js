@@ -1,15 +1,16 @@
 // outsource dependencies
 
 // local dependencies
-import { TYPES } from '../constans/types';
+import { TYPES } from '../../constans/types';
 
 const initialState = {
-  data: [],
+  data: null,
+  loading: false,
 };
 
-export const selector = (state) => state.app;
+export const selector = (state) => state.home;
 
-const app = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   const { type, ...options } = action;
   switch (type) {
     case TYPES.DATA: return {...state, ...options};
@@ -20,4 +21,4 @@ const app = (state = initialState, action) => {
   }
 };
 
-export default app;
+export default reducer;
