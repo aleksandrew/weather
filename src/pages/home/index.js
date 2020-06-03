@@ -63,7 +63,6 @@ const Main = memo(props => {
             description: item.weather[0].description,
         })), [data]);
 
-    console.log()
     return (
         <div className={classes.root}>
             <SearchLine {...props} searchCity={searchCity} />

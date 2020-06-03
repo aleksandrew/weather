@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const API_QUERY = '&appid=1e8e30d723f7ffb3faa125fbfafb5991'
 
-//https://api.openweathermap.org/data/2.5/onecall?lat=30&lon=36&exclude=daily&appid=1e8e30d723f7ffb3faa125fbfafb5991
+//https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.03&exclude=minutely,daily&appid=1e8e30d723f7ffb3faa125fbfafb5991
 const instance = axios.create({
   baseURL: 'http://api.openweathermap.org/data/2.5',
 });

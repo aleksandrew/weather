@@ -18,6 +18,8 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import {parseOfUnixTimestap, setCurrentData} from "../../services/date";
+import Loader from "../../components/Loader";
 
 
 const useStyles = makeStyles(theme =>
@@ -71,6 +73,8 @@ const Search = memo(props => {
     const classes = useStyles();
 
     const {currentCity, inputData} = useSelector(selector);
+    // const curentData =   setCurrentData();
+    // const aaa = _.filter(currentCity, item => _.map(item, day => `${curentData} 00:00:00` <= item.dt_txt <= `${curentData} 23:00:00`))
 
     const dispatch = useDispatch();
     // const getDataRequest = useCallback(() => dispatch({type: TYPES.GET_DATA}), [dispatch]);
@@ -79,61 +83,77 @@ const Search = memo(props => {
     const searchCity = useCallback(str => dispatch({type: TYPES.SEARCH_CITY, str}), [dispatch]);
 
     useEffect(() => {
+        // currentCity &&
     }, []);
 
     const setSearch = useCallback(str => {
     }, []);
 
-    // const currentData = useMemo(() =>
-    //     data && _.map(data, (item) => ({
-    //         id: item.id,
-    //         name: item.name,
-    //         country: item.sys.country,
-    //         windSpeed: item.wind.speed,
-    //         humidity: item.main.humidity,
-    //         pressure: item.main.pressure,
-    //         temp: Math.round(item.main.temp),
-    //         description: item.weather[0].description,
-    //     })), [data]);
+    const currentData = useMemo(() =>
+        currentCity && ({
+            id: currentCity.city.id,
+            name: currentCity.city.name,//
+            country: currentCity.city.country,//
+            // current
+            windSpeed: currentCity.list[0].wind.speed,
+            humidity: currentCity.list[0].main.humidity,
+            pressure: currentCity.list[0].main.pressure,
+            weather: currentCity.list[0].weather[0].main,
+            temp: Math.round(currentCity.list[0].main.temp),
+            tempMax: Math.round(currentCity.list[0].main.temp_max),
+            tempMin: Math.round(currentCity.list[0].main.temp_min),
+            description: currentCity.list[0].weather[0].description,
+            timeSunset: parseOfUnixTimestap(currentCity.city.sunset).toLocaleDateString('en-US'),
+            timeSunrise: parseOfUnixTimestap(currentCity.city.sunrise).toLocaleDateString('en-US'),
+            timeWeatherReport: parseOfUnixTimestap(currentCity.list[0].dt).toLocaleDateString('en-US'),
+            // weather map
+            weatherMap: _.map(currentCity.list, item => ({
+                id: item.dt,
+                weather: item.weather[0].main,
+                temp: Math.round(item.main.temp),
+                timeWeatherReport: parseOfUnixTimestap(item.dt).toLocaleDateString('en-US'),
+            })),
+        }), [currentCity]);
+    console.log(currentData)
 
-    return (
-        <div className={classes.root}>
-            <SearchLine {...props} searchCity={searchCity} />
-                <Card variant="outlined">
+    return currentData
+        ? <Loader/>
+        : <div className={classes.root}>
+            <SearchLine {...props} searchCity={searchCity}/>
+            <Card variant="outlined">
+                <CardContent className={classes.topCard}>
+                    <CardContent className={classes.title}>
+                        <Typography className={classes.title} component="h2" color="textSecondary">
+                            {currentData.name}
+                        </Typography><Typography className={classes.title} component="h2" color="textSecondary">
+                        , {currentData.country}
+                    </Typography>
+                    </CardContent>
+                    <Typography color="textSecondary" gutterBottom>
+                        sdf
+                    </Typography>
+                </CardContent>
+                <CardContent className={classes.bottomCard}>
+                    <CardContent className={classes.title}>
+                        <Typography className={classes.temperature}>
+                            sdfsdf
+                        </Typography>
+                        <sup className={classes.temperatureSymbol}>°C</sup>
+                    </CardContent>
                     <CardContent className={classes.topCard}>
-                        <CardContent className={classes.title}>
-                            <Typography className={classes.title} component="h2" color="textSecondary">
-                                sdfdsf
-                            </Typography><Typography className={classes.title} component="h2" color="textSecondary">
-                            , sdfsdf
-                        </Typography>
-                        </CardContent>
                         <Typography color="textSecondary" gutterBottom>
-                            sdf
+                            Wind: sdf m/s
+                        </Typography>
+                        <Typography color="textSecondary" gutterBottom>
+                            Humidity: sdf %
+                        </Typography>
+                        <Typography color="textSecondary" gutterBottom>
+                            Pressure: sdf hpa
                         </Typography>
                     </CardContent>
-                    <CardContent className={classes.bottomCard}>
-                        <CardContent className={classes.title}>
-                            <Typography className={classes.temperature}>
-                                sdfsdf
-                            </Typography>
-                            <sup className={classes.temperatureSymbol}>°C</sup>
-                        </CardContent>
-                        <CardContent className={classes.topCard}>
-                            <Typography color="textSecondary" gutterBottom>
-                                Wind: sdf m/s
-                            </Typography>
-                            <Typography color="textSecondary" gutterBottom>
-                                Humidity: sdf %
-                            </Typography>
-                            <Typography color="textSecondary" gutterBottom>
-                                Pressure: sdf hpa
-                            </Typography>
-                        </CardContent>
-                    </CardContent>
-                </Card>
+                </CardContent>
+            </Card>
         </div>
-    );
 });
 
 export default Search;
