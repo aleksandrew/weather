@@ -6,6 +6,20 @@
  <br />
   <p>just click on the link [here](wait for it) to see it.</p>
 
+<h2>To start the project at your pc:</h2>
+> * Go on this <a href="https://github.com/aleksandrew/weather/tree/development">link</a>
+> * Create a new React app on your computer
+> * 
+> * <code># installation</code>
+> * <code>$ git clone https://github.com/aleksandrew/weather.git</code>
+> * <code>$ cd weather</code>
+> * <code>$ yarn (or `npm install`</code>
+> * 
+> * <code># installation</code>
+> * <code></code>
+> * <code>yarn dev (or `npm run dev`)</code>
+
+
 
 > Stack have been used:
 >
