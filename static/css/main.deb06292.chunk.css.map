@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,KACI,QAAS,CACT,qBACJ,CAEA,EACI,mBACJ","file":"main.deb06292.chunk.css","sourcesContent":["body {\r\n    margin: 0;\r\n    box-sizing: border-box;\r\n} \r\n\r\na {\r\n    text-transform: none;\r\n}\r\n"]}
