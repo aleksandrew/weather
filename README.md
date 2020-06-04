@@ -10,14 +10,13 @@
 > * Go on this <a href="https://github.com/aleksandrew/weather/tree/development">link</a>
 > * Create a new React app on your computer
 > * 
-> * <code># installation</code>
-> * <code>$ git clone https://github.com/aleksandrew/weather.git</code>
-> * <code>$ cd weather</code>
-> * <code>$ yarn (or `npm install`</code>
-> * 
-> * <code># installation</code>
-> * <code></code>
-> * <code>yarn dev (or `npm run dev`)</code>
+<code># installation</code> <br />
+<code>$ git clone https://github.com/aleksandrew/weather.git</code> <br />
+<code>$ cd weather</code> <br />
+<code>$ yarn (or `npm install`</code> <br />
+
+<code># installation</code>  <br />
+<code>yarn dev (or `npm run dev`)</code> <br />
 
 
 
