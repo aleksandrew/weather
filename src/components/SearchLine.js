@@ -1,14 +1,18 @@
 // outsource dependencies
+import PropTypes from 'prop-types';
+import React, { memo, useCallback, useEffect, useState } from 'react';
+
+// material ui
 import SearchIcon from '@material-ui/icons/Search';
-import InputLabel from "@material-ui/core/InputLabel";
-import IconButton from "@material-ui/core/IconButton";
-import FormControl from "@material-ui/core/FormControl";
-import React, {memo, useCallback, useState} from 'react';
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+
 
 // local dependencies
-import {ROUTES} from "../constans/routes";
+import { ROUTES } from '../constans/routes';
 
 
 const useStyles = makeStyles(theme =>
@@ -33,7 +37,7 @@ const useStyles = makeStyles(theme =>
     })
 );
 
-const SearchLine = memo(({location, history, searchCity}) => {
+const SearchLine = memo(({ location, history, searchCity, inputData }) => {
     const classes = useStyles();
     const [values, setValues] = useState('');
 
@@ -41,25 +45,27 @@ const SearchLine = memo(({location, history, searchCity}) => {
         setValues(event.target.value);
     }, []);
 
+    useEffect(() => {
+        !values && setValues(inputData);
+    }, [inputData, values]);
 
     const onSearch = useCallback(() => (e) => {
-        if ( values ) {
+        if (values) {
             searchCity(values);
 
             if (location.pathname !== ROUTES.SEARCH) {
                 history.push(ROUTES.SEARCH);
             }
         }
-    }, [values, searchCity, location]);
+    }, [values, searchCity, location.pathname, history]);
 
     return <div className={classes.root}>
         <FormControl fullWidth className={classes.margin} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-amount">Search </InputLabel>
+            <InputLabel htmlFor="search-city">Search </InputLabel>
             <OutlinedInput
                 labelWidth={60}
-                value={values.amount}
-                id="outlined-adornment-amount"
-                onChange={handleChange('amount')}
+                id="search-city"
+                onChange={handleChange('search')}
                 endAdornment={
                     <IconButton
                         type="button"
@@ -72,7 +78,18 @@ const SearchLine = memo(({location, history, searchCity}) => {
                 }
             />
         </FormControl>
-    </div>
+    </div>;
 });
+
+SearchLine.propTypes = {
+    inputData: PropTypes.string,
+    history: PropTypes.array.isRequired,
+    location: PropTypes.array.isRequired,
+    searchCity: PropTypes.array.isRequired,
+};
+
+SearchLine.defaultProps = {
+    inputData: '',
+};
 
 export default SearchLine;

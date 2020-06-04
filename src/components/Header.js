@@ -1,9 +1,13 @@
 // outsource dependencies
-import React, {memo} from 'react';
-import Typography from "@material-ui/core/Typography";
-import {createStyles, makeStyles} from '@material-ui/core/styles';
+import React, { memo } from 'react';
+import { NavLink } from 'react-router-dom';
+
+// material ui
+import Typography from '@material-ui/core/Typography';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 // local dependencies
+import { ROUTES } from '../constans/routes';
 
 
 const useStyles = makeStyles(theme =>
@@ -12,7 +16,7 @@ const useStyles = makeStyles(theme =>
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: '15vh',
+            height: '10vh',
             marginBottom: 30,
             backgroundColor: 'black',
             padding: 20,
@@ -28,8 +32,10 @@ const Main = memo(() => {
     const classes = useStyles();
 
     return <header className={classes.header}>
-        <Typography className={classes.title} component="h1" > Weather</Typography>
-    </header>
+        <NavLink style={{ textDecoration: 'none' }} to={ROUTES.HOME}>
+            <Typography className={classes.title} component="h1" > Weather</Typography>
+        </NavLink>
+    </header>;
 });
 
 export default Main;

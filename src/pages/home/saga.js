@@ -4,47 +4,48 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 // local dependencies
 import { TYPES } from './types';
-import {setToLocalStorage} from "../../services/storage";
-import {getBaseDataRequest, getDataOfCityRequest} from '../../services/api';
+import { setToLocalStorage } from '../../services/storage';
+import { getBaseDataRequest, getDataOfCityRequest } from '../../services/api';
 
 
-function* getData({ type, ...payload }) {
-  yield put({ type: TYPES.DATA, loading: true });
+function * getData ({ type, ...payload }) {
+    yield put({ type: TYPES.DATA, loading: true });
 
-  try {
-    const data = yield call(getBaseDataRequest);
-    setToLocalStorage(data);
+    try {
+        const data = yield call(getBaseDataRequest);
+        setToLocalStorage(data);
 
-    yield put({ type: TYPES.DATA, data });
+        yield put({ type: TYPES.DATA, data });
 
-  } catch (e) {
-    yield put({type: TYPES.SHOW_ERROR});
-  }
+    } catch (e) {
+        yield put({ type: TYPES.SHOW_ERROR });
+    }
 
-  yield put({ type: TYPES.DATA, loading: false });
+    yield put({ type: TYPES.DATA, loading: false });
 }
 
-function* getDataOfCity({ type, ...payload }) {
-  const { id } = payload;
+function * getDataOfCity ({ type, ...payload }) {
+    const { id } = payload;
 
-  yield put({ type: TYPES.DATA, loading: true });
-  let currentData = yield select((state) => state.home.data);
+    yield put({ type: TYPES.DATA, loading: true });
+    let currentData = yield select((state) => state.home.data);
 
-  try {
-    const newItem = yield call(getDataOfCityRequest, id);
-    currentData = _.map(currentData, item => id === item.id ? {...newItem} : {...item} );
-    setToLocalStorage(currentData);
+    try {
+        const newItem = yield call(getDataOfCityRequest, id);
+        currentData = _.map(currentData, item => (id === item.id ? { ...newItem } : { ...item }));
 
-    yield put({ type: TYPES.DATA, data: currentData});
+        setToLocalStorage(currentData);
 
-  } catch (e) {
-    yield put({type: TYPES.SHOW_ERROR});
-  }
+        yield put({ type: TYPES.DATA, data: currentData });
 
-  yield put({ type: TYPES.DATA, loading: false });
+    } catch (e) {
+        yield put({ type: TYPES.SHOW_ERROR });
+    }
+
+    yield put({ type: TYPES.DATA, loading: false });
 }
 
 export default function * () {
-  yield takeEvery(TYPES.GET_DATA, getData);
-  yield takeEvery(TYPES.GET_DATA_CITY, getDataOfCity);
+    yield takeEvery(TYPES.GET_DATA, getData);
+    yield takeEvery(TYPES.GET_DATA_CITY, getDataOfCity);
 }

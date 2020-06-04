@@ -6,7 +6,7 @@ import sagasHome from '../pages/home/saga';
 import sagasSearch from '../pages/search/saga';
 
 
-function* sagasRoot () {
+function * sagasRoot () {
     yield all([
         fork(sagasHome),
         fork(sagasSearch)

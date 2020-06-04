@@ -1,19 +1,19 @@
-import './index.css'
+import './index.css';
 import App from './pages';
 import React from 'react';
-import {store} from "./reducer";
 import ReactDOM from 'react-dom';
-import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
+import { store } from './reducer';
+import { Provider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <BrowserRouter >
+    <HashRouter basename={process.env.PUBLIC_URL}>
         <Provider store={store}>
             <App/>
         </Provider>
-    </BrowserRouter>,
-  document.getElementById('root')
+    </HashRouter>,
+    document.getElementById('root')
 );
 
 // If you want your reducer to work offline and load faster, you can change
