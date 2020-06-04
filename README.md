@@ -1,5 +1,11 @@
 <h1>Weather</h1>
-## test task for [Codica](https://www.codica.com)
+<h2> test task for [Codica](https://www.codica.com)<h2>
+  <br />
+  <p>Test application to watch the weather.</p>
+  <p>Is based on api [openweathermap](https://home.openweathermap.org/).</p>
+ <br />
+  <p>just click on the link [here](wait for it) to see it.</p>
+
 
 > Stack have been used:
 >
