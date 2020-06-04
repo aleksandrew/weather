@@ -1,9 +1,9 @@
 // outsource dependencies
 import createSagaMiddleware from 'redux-saga';
-import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 
 // local dependencies
-import sagasRoot from "../sagas";
+import sagasRoot from '../sagas';
 import homeReducer from '../pages/home/reducer';
 import searchReducer from '../pages/search/reducer';
 
