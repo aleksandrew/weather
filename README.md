@@ -19,8 +19,9 @@ Create a new React app on your computer <br />
 <code># installation</code>  <br />
 <code>yarn dev (or `npm run dev`)</code> <br />
 <br />
-<br />
-<br />
+
+
+
 > Stack have been used:
 >
 > * [React.js](https://reactjs.org/)
