@@ -1,8 +1,8 @@
 <h1>Weather</h1>
-<h2> test task for [Codica](https://www.codica.com)<h2>
+<h2> test task for <a href="https://www.codica.com">Codica</a><h2>
   <br />
   <p>Test application to watch the weather.</p>
-  <p>Is based on api [openweathermap](https://home.openweathermap.org/).</p>
+  <p>Is based on api <a href="https://home.openweathermap.org">openweathermap</a></p>
  <br />
   <p>just click on the link [here](wait for it) to see it.</p>
 
