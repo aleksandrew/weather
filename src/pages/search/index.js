@@ -23,6 +23,7 @@ import { selector as searchSelector } from './reducer';
 import { parseOfUnixTimestap } from '../../services/date';
 import { selector as homeSelector } from '../home/reducer';
 import { getToLocalStorage, setToLocalStorage } from '../../services/storage';
+import Layout from '../../components/Layout';
 
 
 const useStyles = makeStyles(theme =>
@@ -106,22 +107,10 @@ const Search = memo(props => {
     const getDataRequest = useCallback(() => dispatch({ type: HOMETYPES.GET_DATA }), [dispatch]);
     const setNewData = useCallback(data => dispatch({ type: HOMETYPES.DATA, data }), [dispatch]);
     const searchCity = useCallback(str => dispatch({ type: TYPES.SEARCH_CITY, str }), [dispatch]);
-    const getDataOfCity = useCallback(id => dispatch({ type: HOMETYPES.GET_DATA_CITY, id }), [dispatch]);
 
     useEffect(() => {
-        if (!data) {
-            const storage = getToLocalStorage();
-
-            if (storage) {
-                setNewData(storage);
-            } else {
-                getDataRequest();
-            }
-        }
-
         if (currentCity) {
             setIncludeOfData(_.some(data, item => currentCity.city.id === item.id));
-
         }
 
         if (!inputData) {
@@ -141,20 +130,32 @@ const Search = memo(props => {
     );
 
     const isHandler = useCallback((event, id) => {
-        if (event === 'delete') {
-            let newData = data;
-            newData = _.filter(newData, item => id !== item.id);
+        let newData;
 
-            setToLocalStorage(newData);
-            setNewData(newData);
+        if (event === 'delete') {
+            newData = _.filter(data, item => id !== item.id);
         }
 
         if (event === 'add') {
-            setIncludeOfData(!includeOfData);
+            const newCityDate = {
+                id: currentCity.city.id,
+                name: currentCity.city.name,
+                sys: { country: currentCity.city.country },
+                wind: { speed: currentCity.list[0].wind.speed },
+                weather: [{ description: currentCity.list[0].weather[0].description }],
+                main: {
+                    humidity: currentCity.list[0].main.humidity,
+                    pressure: currentCity.list[0].main.pressure,
+                    temp: currentCity.list[0].main.temp,
+                },
+            };
 
-            getDataOfCity(id);
+            newData = [{ ...newCityDate }, ...data];
         }
-    }, [data, getDataOfCity, includeOfData, setNewData]);
+
+        setNewData(newData);
+        setToLocalStorage(newData);
+    }, [data, setNewData, currentCity]);
 
 
     const optionsDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
@@ -187,103 +188,105 @@ const Search = memo(props => {
 
     return !currentData
         ? <Loader/>
-        : <div className={classes.root}>
-            <SearchLine {...props} inputData={inputData} searchCity={searchCity}/>
-            <Card
-                variant="outlined"
-                className={classes.card}
-                onMouseLeave={() => isVisibleTitle()}
-                onMouseEnter={() => isVisibleTitle(currentData.id)}
-            >
-                <Slide direction="up" in={visible.id === currentData.id}>
-                    <div className={classes.btn}>
-                        {includeOfData
-                            ? <IconButton
-                                color="inherit"
-                                aria-label="delete {name} card"
-                                onClick={() => isHandler('delete', currentData.id)}
-                            >
-                                <HighlightOffIcon style={{ color: '#fff' }} fontSize="large"/>
-                            </IconButton>
-                            : <IconButton
-                                color="inherit"
-                                aria-label="add {name} card"
-                                onClick={() => isHandler('add', currentData.id)}
-                            >
-                                <AddCircleOutlineIcon style={{ color: '#fff' }} fontSize="large"/>
-                            </IconButton>
-                        }
-                    </div>
-                </Slide>
+        : <Layout>
+            <div className={classes.root}>
+                <SearchLine {...props} inputData={inputData} searchCity={searchCity}/>
+                <Card
+                    variant="outlined"
+                    className={classes.card}
+                    onMouseLeave={() => isVisibleTitle()}
+                    onMouseEnter={() => isVisibleTitle(currentData.id)}
+                >
+                    <Slide direction="up" in={visible.id === currentData.id}>
+                        <div className={classes.btn}>
+                            {includeOfData
+                                ? <IconButton
+                                    color="inherit"
+                                    aria-label="delete {name} card"
+                                    onClick={() => isHandler('delete', currentData.id)}
+                                >
+                                    <HighlightOffIcon style={{ color: '#fff' }} fontSize="large"/>
+                                </IconButton>
+                                : <IconButton
+                                    color="inherit"
+                                    aria-label="add {name} card"
+                                    onClick={() => isHandler('add', currentData.id)}
+                                >
+                                    <AddCircleOutlineIcon style={{ color: '#fff' }} fontSize="large"/>
+                                </IconButton>
+                            }
+                        </div>
+                    </Slide>
 
-                <CardContent className={classes.topCard}>
-                    <CardContent className={classes.vertical}>
-                        <CardContent className={classes.title}>
-                            <Typography className={classes.title} component="h2">
-                                {currentData.name}
-                            </Typography>
-                            <Typography className={classes.title} component="h2">
-                                , {currentData.country}
-                            </Typography>
-                        </CardContent>
-                        <Typography color="textSecondary" gutterBottom>
-                            {currentData.timeWeatherReport}
-                        </Typography>
-                        <Typography color="textSecondary" gutterBottom>
-                            {currentData.description}
-                        </Typography>
-                    </CardContent>
-                    <CardContent className={classes.vertical}>
-                        <Typography color="textSecondary" gutterBottom>
-                            time sunrise: {currentData.timeSunrise}
-                        </Typography>
-                        <Typography color="textSecondary" gutterBottom>
-                            time sunset: {currentData.timeSunset}
-                        </Typography>
-                    </CardContent>
-                </CardContent>
-                <CardContent className={classes.bottomCard}>
-                    <CardContent className={classes.vertical + classes.padding0}>
-                        <CardContent className={classes.title}>
-                            <Typography className={classes.temperature}>
-                                {currentData.temp}
-                            </Typography>
-                            <sup className={classes.temperatureSymbol}>°C</sup>
-                        </CardContent>
-                        <br/>
-                        <CardContent style={{ padding: 0 }} className={classes.vertical}>
+                    <CardContent className={classes.topCard}>
+                        <CardContent className={classes.vertical}>
+                            <CardContent className={classes.title}>
+                                <Typography className={classes.title} component="h2">
+                                    {currentData.name}
+                                </Typography>
+                                <Typography className={classes.title} component="h2">
+                                    , {currentData.country}
+                                </Typography>
+                            </CardContent>
                             <Typography color="textSecondary" gutterBottom>
-                                min. temperature: {currentData.tempMin}
-                                <sup>°C</sup>
+                                {currentData.timeWeatherReport}
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                min. temperature: {currentData.tempMax}
-                                <sup>°C</sup>
+                                {currentData.description}
+                            </Typography>
+                        </CardContent>
+                        <CardContent className={classes.vertical}>
+                            <Typography color="textSecondary" gutterBottom>
+                                time sunrise: {currentData.timeSunrise}
+                            </Typography>
+                            <Typography color="textSecondary" gutterBottom>
+                                time sunset: {currentData.timeSunset}
                             </Typography>
                         </CardContent>
                     </CardContent>
-                    <CardContent className={classes.infoWeather}>
-                        <Typography color="textSecondary" gutterBottom>
-                            Wind: {currentData.windSpeed} m/s
-                        </Typography>
-                        <Typography color="textSecondary" gutterBottom>
-                            Humidity: {currentData.humidity} %
-                        </Typography>
-                        <Typography color="textSecondary" gutterBottom>
-                            Pressure: {currentData.pressure} hpa
-                        </Typography>
+                    <CardContent className={classes.bottomCard}>
+                        <CardContent className={classes.vertical + classes.padding0}>
+                            <CardContent className={classes.title}>
+                                <Typography className={classes.temperature}>
+                                    {currentData.temp}
+                                </Typography>
+                                <sup className={classes.temperatureSymbol}>°C</sup>
+                            </CardContent>
+                            <br/>
+                            <CardContent style={{ padding: 0 }} className={classes.vertical}>
+                                <Typography color="textSecondary" gutterBottom>
+                                    min. temperature: {currentData.tempMin}
+                                    <sup>°C</sup>
+                                </Typography>
+                                <Typography color="textSecondary" gutterBottom>
+                                    min. temperature: {currentData.tempMax}
+                                    <sup>°C</sup>
+                                </Typography>
+                            </CardContent>
+                        </CardContent>
+                        <CardContent className={classes.infoWeather}>
+                            <Typography color="textSecondary" gutterBottom>
+                                Wind: {currentData.windSpeed} m/s
+                            </Typography>
+                            <Typography color="textSecondary" gutterBottom>
+                                Humidity: {currentData.humidity} %
+                            </Typography>
+                            <Typography color="textSecondary" gutterBottom>
+                                Pressure: {currentData.pressure} hpa
+                            </Typography>
+                        </CardContent>
                     </CardContent>
-                </CardContent>
-            </Card>
-            {/*<Card*/}
+                </Card>
+                {/*<Card*/}
 
-            {/*</Card>*/}
-        </div>;
+                {/*</Card>*/}
+            </div>
+        </Layout>;
 });
 
 Search.propTypes = {
-    match: PropTypes.array.isRequired,
-    history: PropTypes.array.isRequired,
+    match: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
 };
 
 export default Search;

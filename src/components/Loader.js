@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme =>
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: '70vh',
+            height: '100vh',
         },
     })
 );

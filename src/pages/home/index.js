@@ -9,8 +9,9 @@ import Grid from '@material-ui/core/Grid';
 // local dependencies
 import { TYPES } from './types';
 import { selector } from './reducer';
-import { TYPES as TYPESSEARCH } from '../search/types';
+import Layout from '../../components/Layout';
 import SearchLine from '../../components/SearchLine';
+import { TYPES as TYPESSEARCH } from '../search/types';
 import WeatherCard from '../../components/WeatherCard';
 import { getToLocalStorage, setToLocalStorage } from '../../services/storage';
 
@@ -59,14 +60,14 @@ const Main = memo(props => {
         })), [data]);
 
     return (
-        <div>
+        <Layout >
             <SearchLine {...props} searchCity={searchCity} />
             <Grid container spacing={3}>
                 {_.map(currentData, (tile) =>
-                    <WeatherCard isListener={isListener} key={tile.id} {...tile} />
+                    <WeatherCard searchCity={searchCity} isListener={isListener} key={tile.id} {...tile} />
                 )}
             </Grid>
-        </div>
+        </Layout>
     );
 });
 

@@ -11,6 +11,7 @@ import searchReducer from '../pages/search/reducer';
 // eslint-disable-next-line
 const enchantedCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+
 const reducers = combineReducers({
     home: homeReducer,
     search: searchReducer,
@@ -18,4 +19,5 @@ const reducers = combineReducers({
 
 const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(reducers, enchantedCompose(applyMiddleware(sagaMiddleware)));
+window.store = store;
 sagaMiddleware.run(sagasRoot);

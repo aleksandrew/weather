@@ -68,7 +68,7 @@ const useStyles = makeStyles(theme =>
 
 const WeatherCard = memo(props => {
     const classes = useStyles();
-    const { isListener, id, name, country, windSpeed, humidity, pressure, temp, description } = props;
+    const { isListener, id, name, country, windSpeed, humidity, pressure, temp, description, searchCity } = props;
 
     const [visible, setVisible] = useState({ isVisible: false, id: null });
 
@@ -108,7 +108,7 @@ const WeatherCard = memo(props => {
             </div>
         </Slide>
 
-        <NavLink style={{ textDecoration: 'none' }} to={`${ROUTES.SEARCH}/${name}`} >
+        <NavLink style={{ textDecoration: 'none' }} onClick={() => searchCity(name)} to={`${ROUTES.SEARCH}/${name}`} >
             <Card className={classes.cardContainer} variant="outlined">
                 <CardContent className={classes.topCard}>
                     <CardContent className={classes.title}>
@@ -154,6 +154,7 @@ WeatherCard.propTypes = {
     isListener: PropTypes.func.isRequired,
     humidity: PropTypes.number.isRequired,
     pressure: PropTypes.number.isRequired,
+    searchCity: PropTypes.func.isRequired,
     windSpeed: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
 };
