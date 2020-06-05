@@ -4,7 +4,7 @@
   <p>Test application to watch the weather.</p>
   <p>Is based on api <a href="https://home.openweathermap.org">openweathermap</a></p>
  <br />
-  <p>just click on the link <a href="https://aleksandrew.github.io">here</a> to see it.</p>
+  <p>just click on the link <a href="https://aleksandrew.github.io/weather">here</a> to see it.</p>
 
 <h2>To start the project at your pc:</h2>
 # installation <br />
