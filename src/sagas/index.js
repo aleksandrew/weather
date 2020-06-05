@@ -1,12 +1,16 @@
 // outsource dependencies
-import { fork } from 'redux-saga/effects';
+import { fork, all } from 'redux-saga/effects';
 
 // local dependencies
-import app from './app';
+import sagasHome from '../pages/home/saga';
+import sagasSearch from '../pages/search/saga';
 
 
 function * sagasRoot () {
-    yield fork(app);
+    yield all([
+        fork(sagasHome),
+        fork(sagasSearch)
+    ]);
 }
 
 export default sagasRoot;

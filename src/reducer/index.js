@@ -1,21 +1,21 @@
 // outsource dependencies
 import createSagaMiddleware from 'redux-saga';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 
 // local dependencies
-// import sagasRoot from '../sagas';
+import sagasRoot from '../sagas';
+import homeReducer from '../pages/home/reducer';
+import searchReducer from '../pages/search/reducer';
 
 
-// dev tools middleware
-const reduxDevTools =
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+// eslint-disable-next-line
+const enchantedCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const reducers = combineReducers({
-    // app: appReducer,
+    home: homeReducer,
+    search: searchReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(reducers, applyMiddleware(sagaMiddleware), reduxDevTools);
+export const store = createStore(reducers, enchantedCompose(applyMiddleware(sagaMiddleware)));
 sagaMiddleware.run(sagasRoot);
-
-export default store;

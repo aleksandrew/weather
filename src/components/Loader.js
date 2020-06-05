@@ -1,9 +1,12 @@
 // outsource dependencies
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+
+// material ui
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 // local dependencies
+
 
 const useStyles = makeStyles(theme =>
     createStyles({
@@ -17,12 +20,12 @@ const useStyles = makeStyles(theme =>
     })
 );
 
-export default function Loader() {
+export default function Loader () {
     const classes = useStyles();
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        function tick() {
+        function tick () {
             // reset when reaching 100%
             setProgress((oldProgress) => (oldProgress >= 100 ? 0 : oldProgress + 1));
         }
