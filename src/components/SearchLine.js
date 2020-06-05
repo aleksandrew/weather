@@ -83,9 +83,9 @@ const SearchLine = memo(({ location, history, searchCity, inputData }) => {
 
 SearchLine.propTypes = {
     inputData: PropTypes.string,
-    history: PropTypes.array.isRequired,
-    location: PropTypes.array.isRequired,
-    searchCity: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    searchCity: PropTypes.func.isRequired,
 };
 
 SearchLine.defaultProps = {

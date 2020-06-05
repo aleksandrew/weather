@@ -15,7 +15,7 @@
 <code>$ npm install</code> <br />
 <br />
 # installation  <br />
-<code>npm run dev</code> <br />
+<code>npm run start</code> <br />
 <br />
 
 

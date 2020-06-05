@@ -24,10 +24,10 @@ function * search ({ type, ...payload }) {
     try {
         const currentCity = yield call(searchRequest, str);
 
-        console.log(currentCity);
         const { list } = currentCity;
         const timeData = _.filter(list, item => finishedTodayUnixData >= item.dt);
         timeData.length <= 2 && _.filter(list, item => finishedTomorrowUnixData >= item.dt);
+        console.log({ ...currentCity, list: [...timeData] });
 
         yield put({ type: TYPES.DATA, currentCity: { ...currentCity, list: [...timeData] } });
 
