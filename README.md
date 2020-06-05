@@ -7,17 +7,15 @@
   <p>just click on the link <a href="https://aleksandrew.github.io/weather/#/weather/search">here</a> to see it.</p>
 
 <h2>To start the project at your pc:</h2>
-Go on this <a href="https://github.com/aleksandrew/weather/tree/development">link</a>
-Create a new React app on your computer <br />
-<br />
-<br />
-<code># installation</code> <br />
+# installation <br />
 <code>$ git clone https://github.com/aleksandrew/weather.git</code> <br />
 <code>$ cd weather</code> <br />
-<code>$ yarn (or `npm install`</code> <br />
+<code>$ code .</code> <br />
+(or open project in your favorite IDE )  <br />
+<code>$ npm install</code> <br />
 <br />
-<code># installation</code>  <br />
-<code>yarn dev (or `npm run dev`)</code> <br />
+# installation  <br />
+<code>npm run dev</code> <br />
 <br />
 
 
