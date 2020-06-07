@@ -22,7 +22,7 @@ import SearchLine from '../../components/SearchLine';
 import { selector as searchSelector } from './reducer';
 import { parseOfUnixTimestap } from '../../services/date';
 import { selector as homeSelector } from '../home/reducer';
-import { getToLocalStorage, setToLocalStorage } from '../../services/storage';
+import { setToLocalStorage } from '../../services/storage';
 import Layout from '../../components/Layout';
 
 
@@ -160,6 +160,7 @@ const Search = memo(props => {
 
     const optionsDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
     const optionsTime = { hour: '2-digit', minute: '2-digit' };
+    console.log(currentCity && parseOfUnixTimestap(currentCity.list[0].dt).toLocaleDateString('en-US', optionsDate))
     const currentData = useMemo(() =>
         currentCity && ({
             id: currentCity.city.id,

@@ -25,10 +25,20 @@ function * search ({ type, ...payload }) {
         const currentCity = yield call(searchRequest, str);
 
         const { list } = currentCity;
-        const timeData = _.filter(list, item => finishedTodayUnixData >= item.dt);
-        timeData.length <= 2 && _.filter(list, item => finishedTomorrowUnixData >= item.dt);
-        console.log({ ...currentCity, list: [...timeData] });
+        let timeData = _.filter(list, item => finishedTodayUnixData >= item.dt);
 
+        // if it's 18:00PM, it downloads the list for the next day
+        timeData.length <= 2 && _.filter(list, item => finishedTomorrowUnixData >= item.dt);
+
+        // api data is not correct, the UTC data is 3 hours behind
+        let a;
+        // a = _.map(timeData, obj => {...obj} )
+        // for (let key of timeData) {
+        //     _.map(key, i => 'dt' in i)
+        // }
+            // +item.dt - 10800
+
+        console.log(a)
         yield put({ type: TYPES.DATA, currentCity: { ...currentCity, list: [...timeData] } });
 
     } catch (e) {
