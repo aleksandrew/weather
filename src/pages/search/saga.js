@@ -1,15 +1,15 @@
 // outsource dependencies
 import _ from 'lodash';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import {call, put, takeLatest} from 'redux-saga/effects';
 
 // local dependencies
-import { TYPES } from './types';
-import { searchRequest } from '../../services/api';
-import { parseToUnixTimestap } from '../../services/date';
+import {TYPES} from './types';
+import {searchRequest} from '../../services/api';
+import {parseToUnixTimestap} from '../../services/date';
 
 
-function * search ({ type, ...payload }) {
-    const { str } = payload;
+function* search({type, ...payload}) {
+    const {str} = payload;
 
     let todayMidnight = new Date().setHours(0, 0, 0, 0);
     todayMidnight = new Date(todayMidnight);
@@ -19,35 +19,34 @@ function * search ({ type, ...payload }) {
     const finishedTodayUnixData = parseToUnixTimestap(new Date(finishedToday));
     const finishedTomorrowUnixData = parseToUnixTimestap(new Date(finishedTomorrow));
 
-    yield put({ type: TYPES.DATA, loading: true, inputData: str });
+    yield put({type: TYPES.DATA, loading: true, inputData: str});
 
     try {
         const currentCity = yield call(searchRequest, str);
 
-        const { list } = currentCity;
+        const {list} = currentCity;
         let timeData = _.filter(list, item => finishedTodayUnixData >= item.dt);
 
         // if it's 18:00PM, it downloads the list for the next day
         timeData.length <= 2 && _.filter(list, item => finishedTomorrowUnixData >= item.dt);
 
-        // api data is not correct, the UTC data is 3 hours behind
-        let a;
-        // a = _.map(timeData, obj => {...obj} )
-        // for (let key of timeData) {
-        //     _.map(key, i => 'dt' in i)
-        // }
-            // +item.dt - 10800
+        // api data is not correct, the UTC data is 3 hours behind. Fixed it
+        timeData = _.map(timeData, item => {
+                for (let key in item) {
+                    if ('dt' === key) return ({...item, 'dt': item[key] - 10800})
+                }
+            }
+        )
 
-        console.log(a)
-        yield put({ type: TYPES.DATA, currentCity: { ...currentCity, list: [...timeData] } });
+        yield put({type: TYPES.DATA, currentCity: {...currentCity, list: [...timeData]}});
 
     } catch (e) {
-        yield put({ type: TYPES.SHOW_ERROR });
+        yield put({type: TYPES.SHOW_ERROR});
     }
 
-    yield put({ type: TYPES.DATA, loading: false });
+    yield put({type: TYPES.DATA, loading: false});
 }
 
-export default function * () {
+export default function* () {
     yield takeLatest(TYPES.SEARCH_CITY, search);
 }
