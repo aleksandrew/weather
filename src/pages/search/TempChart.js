@@ -1,30 +1,15 @@
 // outsource dependencies
-import _ from 'lodash';
 import PropTypes from 'prop-types';
-import {useDispatch, useSelector} from 'react-redux';
-import React, {memo, useCallback, useMemo, useEffect, useState} from 'react';
+import React, { memo } from 'react';
+import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
 
 // material ui
 import Card from '@material-ui/core/Card';
-import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import CardContent from '@material-ui/core/CardContent';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import {createStyles, makeStyles} from '@material-ui/core/styles';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 // local dependencies
-import {TYPES} from './types';
-import Loader from '../../components/Loader';
-import {TYPES as HOMETYPES} from '../home/types';
-import SearchLine from '../../components/SearchLine';
-import {selector as searchSelector} from './reducer';
-import {parseOfUnixTimestap} from '../../services/date';
-import {selector as homeSelector} from '../home/reducer';
-import {setToLocalStorage} from '../../services/storage';
-import Layout from '../../components/Layout';
-import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
 
 
 const useStyles = makeStyles(theme =>
@@ -37,7 +22,7 @@ const useStyles = makeStyles(theme =>
     })
 );
 
-const CustomTooltip = ({active, payload}) => {
+const CustomTooltip = ({ active, payload }) => {
     const classes = useStyles();
 
     return active
@@ -52,16 +37,26 @@ const CustomTooltip = ({active, payload}) => {
                 <Typography>Pressure: {payload[0].payload.pressure} hpa</Typography>
             </CardContent>
         </Card>
-        : null
-}
+        : null;
+};
 
-const TempChart = memo(({data}) => (
+CustomTooltip.propTypes = {
+    active: PropTypes.bool,
+    payload: PropTypes.array,
+};
+
+CustomTooltip.defaultProps = {
+    payload: [],
+    active: false,
+};
+
+const TempChart = memo(({ matches, data }) => (
     <BarChart
-        width={1000}
+        width={matches ? 500 : 600}
         data={data}
         height={300}
         margin={{
-            top: 20, bottom: 20,
+            top: 10, bottom: 10,
         }}
     >
         <CartesianGrid strokeDasharray="3 3"/>
@@ -70,12 +65,12 @@ const TempChart = memo(({data}) => (
         <Tooltip content={<CustomTooltip/>}/>
         <Legend/>
         <Bar dataKey="temperature" barSize={20} fill="#1c42b5"/>
-
     </BarChart>
 ));
 
 TempChart.propTypes = {
     data: PropTypes.array.isRequired,
+    matches: PropTypes.bool.isRequired,
 };
 
 export default TempChart;
