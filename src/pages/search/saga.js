@@ -11,7 +11,7 @@ import {parseToUnixTimestap} from '../../services/date';
 function* search({type, ...payload}) {
     const {str} = payload;
 
-    let todayMidnight = new Date().setHours(0, 0, 0, 0);
+    let todayMidnight = new Date().setHours(0, 20, 0, 0);
     todayMidnight = new Date(todayMidnight);
     const finishedToday = todayMidnight.setDate(todayMidnight.getDate() + 1);
     const finishedTomorrow = todayMidnight.setDate(todayMidnight.getDate() + 2);
@@ -25,7 +25,7 @@ function* search({type, ...payload}) {
         const currentCity = yield call(searchRequest, str);
 
         const {list} = currentCity;
-        let timeData = _.filter(list, item => finishedTodayUnixData >= item.dt);
+        let timeData = _.filter(list, item => finishedTodayUnixData + 10000 >= item.dt);
 
         // if it's 18:00PM, it downloads the list for the next day
         timeData.length <= 2 && _.filter(list, item => finishedTomorrowUnixData >= item.dt);

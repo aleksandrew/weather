@@ -1,8 +1,8 @@
 // outsource dependencies
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { memo, useCallback, useMemo, useEffect, useState } from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import React, {memo, useCallback, useMemo, useEffect, useState} from 'react';
 
 // material ui
 import Card from '@material-ui/core/Card';
@@ -11,19 +11,21 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CardContent from '@material-ui/core/CardContent';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import {createStyles, makeStyles} from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 // local dependencies
-import { TYPES } from './types';
+import {TYPES} from './types';
 import Loader from '../../components/Loader';
-import { TYPES as HOMETYPES } from '../home/types';
+import {TYPES as HOMETYPES} from '../home/types';
 import SearchLine from '../../components/SearchLine';
-import { selector as searchSelector } from './reducer';
-import { parseOfUnixTimestap } from '../../services/date';
-import { selector as homeSelector } from '../home/reducer';
-import { setToLocalStorage } from '../../services/storage';
+import {selector as searchSelector} from './reducer';
+import {parseOfUnixTimestap} from '../../services/date';
+import {selector as homeSelector} from '../home/reducer';
+import {setToLocalStorage} from '../../services/storage';
 import Layout from '../../components/Layout';
+import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import TempChart from "./TempChart";
 
 
 const useStyles = makeStyles(theme =>
@@ -96,17 +98,17 @@ const useStyles = makeStyles(theme =>
 const Search = memo(props => {
     const classes = useStyles();
 
-    const { match } = props;
-    const { data } = useSelector(homeSelector);
-    const { currentCity, inputData } = useSelector(searchSelector);
+    const {match} = props;
+    const {data} = useSelector(homeSelector);
+    const {currentCity, inputData} = useSelector(searchSelector);
 
     const [includeOfData, setIncludeOfData] = useState(false);
-    const [visible, setVisible] = useState({ isVisible: false, id: null });
+    const [visible, setVisible] = useState({isVisible: false, id: null});
 
     const dispatch = useDispatch();
-    const getDataRequest = useCallback(() => dispatch({ type: HOMETYPES.GET_DATA }), [dispatch]);
-    const setNewData = useCallback(data => dispatch({ type: HOMETYPES.DATA, data }), [dispatch]);
-    const searchCity = useCallback(str => dispatch({ type: TYPES.SEARCH_CITY, str }), [dispatch]);
+    const getDataRequest = useCallback(() => dispatch({type: HOMETYPES.GET_DATA}), [dispatch]);
+    const setNewData = useCallback(data => dispatch({type: HOMETYPES.DATA, data}), [dispatch]);
+    const searchCity = useCallback(str => dispatch({type: TYPES.SEARCH_CITY, str}), [dispatch]);
 
     useEffect(() => {
         if (currentCity) {
@@ -121,9 +123,9 @@ const Search = memo(props => {
     const isVisibleTitle = useCallback(
         (id = null) => {
             if (id || !visible.isVisible) {
-                setVisible({ isVisible: true, id });
+                setVisible({isVisible: true, id});
             } else if (visible.isVisible) {
-                setVisible({ isVisible: false, id: null });
+                setVisible({isVisible: false, id: null});
             }
         },
         [visible]
@@ -140,9 +142,9 @@ const Search = memo(props => {
             const newCityDate = {
                 id: currentCity.city.id,
                 name: currentCity.city.name,
-                sys: { country: currentCity.city.country },
-                wind: { speed: currentCity.list[0].wind.speed },
-                weather: [{ description: currentCity.list[0].weather[0].description }],
+                sys: {country: currentCity.city.country},
+                wind: {speed: currentCity.list[0].wind.speed},
+                weather: [{description: currentCity.list[0].weather[0].description}],
                 main: {
                     humidity: currentCity.list[0].main.humidity,
                     pressure: currentCity.list[0].main.pressure,
@@ -150,7 +152,7 @@ const Search = memo(props => {
                 },
             };
 
-            newData = [{ ...newCityDate }, ...data];
+            newData = [{...newCityDate}, ...data];
         }
 
         setNewData(newData);
@@ -158,8 +160,9 @@ const Search = memo(props => {
     }, [data, setNewData, currentCity]);
 
 
-    const optionsDate = { weekday: 'long', hour: '2-digit', minute: '2-digit' };
-    const optionsTime = { hour: '2-digit', minute: '2-digit' };
+    const optionsDate = {weekday: 'long', hour: '2-digit', minute: '2-digit'};
+    const optionsFullDate = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    const optionsTime = {hour: '2-digit', minute: '2-digit'};
     console.log(currentCity && parseOfUnixTimestap(currentCity.list[0].dt).toLocaleDateString('en-US', optionsDate))
     const currentData = useMemo(() =>
         currentCity && ({
@@ -181,9 +184,13 @@ const Search = memo(props => {
             // weather map
             weatherMap: _.map(currentCity.list, item => ({
                 id: item.dt,
+                windSpeed: item.wind.speed,
+                humidity: item.main.humidity,
+                pressure: item.main.pressure,
                 weather: item.weather[0].main,
-                temp: Math.round(item.main.temp),
-                timeWeatherReport: parseOfUnixTimestap(item.dt).toLocaleDateString('en-US', optionsTime),
+                temperature: Math.round(item.main.temp),
+                time: parseOfUnixTimestap(item.dt).toLocaleTimeString('en-US', optionsTime),
+                fullTime: parseOfUnixTimestap(item.dt).toLocaleDateString('en-US', optionsFullDate),
             })),
         }), [currentCity, optionsDate, optionsTime]);
 
@@ -206,14 +213,14 @@ const Search = memo(props => {
                                     aria-label="delete {name} card"
                                     onClick={() => isHandler('delete', currentData.id)}
                                 >
-                                    <HighlightOffIcon style={{ color: '#fff' }} fontSize="large"/>
+                                    <HighlightOffIcon style={{color: '#fff'}} fontSize="large"/>
                                 </IconButton>
                                 : <IconButton
                                     color="inherit"
                                     aria-label="add {name} card"
                                     onClick={() => isHandler('add', currentData.id)}
                                 >
-                                    <AddCircleOutlineIcon style={{ color: '#fff' }} fontSize="large"/>
+                                    <AddCircleOutlineIcon style={{color: '#fff'}} fontSize="large"/>
                                 </IconButton>
                             }
                         </div>
@@ -223,10 +230,7 @@ const Search = memo(props => {
                         <CardContent className={classes.vertical}>
                             <CardContent className={classes.title}>
                                 <Typography className={classes.title} component="h2">
-                                    {currentData.name}
-                                </Typography>
-                                <Typography className={classes.title} component="h2">
-                                    , {currentData.country}
+                                    {currentData.name}, {currentData.country}
                                 </Typography>
                             </CardContent>
                             <Typography color="textSecondary" gutterBottom>
@@ -254,7 +258,7 @@ const Search = memo(props => {
                                 <sup className={classes.temperatureSymbol}>°C</sup>
                             </CardContent>
                             <br/>
-                            <CardContent style={{ padding: 0 }} className={classes.vertical}>
+                            <CardContent style={{padding: 0}} className={classes.vertical}>
                                 <Typography color="textSecondary" gutterBottom>
                                     min. temperature: {currentData.tempMin}
                                     <sup>°C</sup>
@@ -278,9 +282,9 @@ const Search = memo(props => {
                         </CardContent>
                     </CardContent>
                 </Card>
-                {/*<Card*/}
-
-                {/*</Card>*/}
+                <Card>
+                    <TempChart data={currentData.weatherMap}/>
+                </Card>
             </div>
         </Layout>;
 });
