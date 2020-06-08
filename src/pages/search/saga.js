@@ -11,7 +11,7 @@ import { parseToUnixTimestap } from '../../services/date';
 function * search ({ type, ...payload }) {
     const { str } = payload;
 
-    let todayMidnight = new Date().setHours(0, 0, 0, 0);
+    let todayMidnight = new Date().setHours(0, 20, 0, 0);
     todayMidnight = new Date(todayMidnight);
     const finishedToday = todayMidnight.setDate(todayMidnight.getDate() + 1);
     const finishedTomorrow = todayMidnight.setDate(todayMidnight.getDate() + 2);
@@ -25,9 +25,18 @@ function * search ({ type, ...payload }) {
         const currentCity = yield call(searchRequest, str);
 
         const { list } = currentCity;
-        const timeData = _.filter(list, item => finishedTodayUnixData >= item.dt);
+        let timeData = _.filter(list, item => finishedTodayUnixData + 10000 >= item.dt);
+
+        // if it's 18:00PM, it downloads the list for the next day
         timeData.length <= 2 && _.filter(list, item => finishedTomorrowUnixData >= item.dt);
-        console.log({ ...currentCity, list: [...timeData] });
+
+        // api data is not correct, the UTC data is 3 hours behind. Fixed it
+        timeData = _.map(timeData, item => {
+            for (const key in item) {
+                if (key === 'dt') { return ({ ...item, dt: item[key] - 10800 }); }
+            }
+        }
+        );
 
         yield put({ type: TYPES.DATA, currentCity: { ...currentCity, list: [...timeData] } });
 
