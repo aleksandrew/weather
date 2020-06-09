@@ -1,9 +1,9 @@
-export function setToLocalStorage (arr) {
+export function setLocalStorage (arr) {
     localStorage.removeItem('dataWeather');
     localStorage.setItem('dataWeather', JSON.stringify([arr]));
 }
 
-export function getToLocalStorage () {
+export function getLocalStorage () {
     const storage = localStorage.getItem('dataWeather');
 
     if (storage) {

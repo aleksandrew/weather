@@ -13,7 +13,7 @@ import Layout from '../../components/Layout';
 import SearchLine from '../../components/SearchLine';
 import { TYPES as TYPESSEARCH } from '../search/types';
 import WeatherCard from '../../components/WeatherCard';
-import { getToLocalStorage, setToLocalStorage } from '../../services/storage';
+import { getLocalStorage, setLocalStorage } from '../../services/storage';
 
 
 const Main = memo(props => {
@@ -26,7 +26,7 @@ const Main = memo(props => {
     const searchCity = useCallback(str => dispatch({ type: TYPESSEARCH.SEARCH_CITY, str }), [dispatch]);
 
     useEffect(() => {
-        const storage = getToLocalStorage();
+        const storage = getLocalStorage();
 
         if (!data) {
             if (storage) {
@@ -42,7 +42,7 @@ const Main = memo(props => {
             let newData = data;
             newData = _.filter(newData, item => id !== item.id);
 
-            setToLocalStorage(newData);
+            setLocalStorage(newData);
             setNewData(newData);
         } else if (event === 'refresh') { getDataOfCity(id); }
     }, [data, setNewData, getDataOfCity]);
