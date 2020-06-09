@@ -23,7 +23,7 @@ import SearchLine from '../../components/SearchLine';
 import { selector as searchSelector } from './reducer';
 import { parseOfUnixTimestap } from '../../services/date';
 import { selector as homeSelector } from '../home/reducer';
-import { setToLocalStorage } from '../../services/storage';
+import { setLocalStorage } from '../../services/storage';
 
 
 const useStyles = makeStyles(theme =>
@@ -113,7 +113,7 @@ const Search = memo(props => {
         }
 
         setNewData(newData);
-        setToLocalStorage(newData);
+        setLocalStorage(newData);
     }, [data, setNewData, currentCity]);
 
     const optionsTime = { hour: '2-digit', minute: '2-digit' };
@@ -125,6 +125,8 @@ const Search = memo(props => {
             id: currentCity.city.id,
             name: currentCity.city.name,
             country: currentCity.city.country,
+            // handler
+            handler: handler => isHandler( handler, currentCity.city.id ),
             // current
             windSpeed: currentCity.list[0].wind.speed,
             humidity: currentCity.list[0].main.humidity,
@@ -160,14 +162,14 @@ const Search = memo(props => {
                         ? <IconButton
                             color="inherit"
                             aria-label="delete {name} card"
-                            onClick={() => isHandler('delete', currentData.id)}
+                            onClick={() => currentData.handler('delete')}
                         >
                             <HighlightOffIcon style={{ color: '#fff' }} fontSize="large"/>
                         </IconButton>
                         : <IconButton
                             color="inherit"
                             aria-label="add {name} card"
-                            onClick={() => isHandler('add', currentData.id)}
+                            onClick={() => currentData.handler('add')}
                         >
                             <AddCircleOutlineIcon style={{ color: '#fff' }} fontSize="large"/>
                         </IconButton>

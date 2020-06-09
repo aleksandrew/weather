@@ -4,7 +4,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 // local dependencies
 import { TYPES } from './types';
-import { setToLocalStorage } from '../../services/storage';
+import { setLocalStorage } from '../../services/storage';
 import { getBaseDataRequest, getDataOfCityRequest } from '../../services/api';
 
 
@@ -13,7 +13,7 @@ function * getData ({ type, ...payload }) {
 
     try {
         const data = yield call(getBaseDataRequest);
-        setToLocalStorage(data);
+        setLocalStorage(data);
 
         yield put({ type: TYPES.DATA, data });
 
@@ -34,7 +34,7 @@ function * getDataOfCity ({ type, ...payload }) {
         const newItem = yield call(getDataOfCityRequest, id);
         currentData = _.map(currentData, item => (id === item.id ? { ...newItem } : { ...item }));
 
-        setToLocalStorage(currentData);
+        setLocalStorage(currentData);
 
         yield put({ type: TYPES.DATA, data: currentData });
 
