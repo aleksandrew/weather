@@ -26,6 +26,7 @@
 > * [Redux](https://redux.js.org/)
 > * [Redux Saga](https://redux-saga.js.org/)
 > * [Axios](https://github.com/axios/axios)
+> * [Recharts](https://recharts.org/en-US/)
 > * [Lodash](https://lodash.com/)
 > * [Gh-pages](https://github.com/gitname/react-gh-pages)
 > * [Eslint](https://eslint.org/)
